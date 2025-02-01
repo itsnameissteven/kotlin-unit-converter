@@ -40,7 +40,8 @@ android {
 }
 
 dependencies {
-
+    implementation("junit:junit:4.13.2")
+    implementation("androidx.arch.core:core-testing:2.1.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
