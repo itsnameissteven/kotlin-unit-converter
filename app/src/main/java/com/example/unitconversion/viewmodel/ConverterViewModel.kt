@@ -3,6 +3,8 @@ package com.example.unitconversion.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlin.math.pow
+import kotlin.math.round
 
 sealed class MeasurementUnit(val displayName: String) {
     object Meters : MeasurementUnit("Meters")
@@ -31,15 +33,27 @@ class ConverterViewModel: ViewModel() {
         MeasurementUnit.Millimeters
     )
 
+    private fun formatDecimals(value: Double): String {
+        val factor = 10.0.pow(5)
+        val rounded = round(value * factor) / factor
+        val roundedString = rounded.toString()
+        val decimals = if(roundedString.contains('.') && !roundedString.endsWith("0"))  {
+            roundedString.split(".")[1].length
+        } else {
+            0
+        }
+        return String.format("%.${decimals}f", rounded)
+    }
 
-    private fun convertLength(value: Double, fromUnit: MeasurementUnit, toUnit: MeasurementUnit): Double {
+
+    private fun convertLength(value: Double, fromUnit: MeasurementUnit, toUnit: MeasurementUnit): String {
         // Convert to meters first to standardize value
         val meters = when (fromUnit) {
             MeasurementUnit.Meters -> value
             MeasurementUnit.Kilometers -> value * 1000
             MeasurementUnit.Feet -> value * 0.3048
             MeasurementUnit.Inches -> value * 0.0254
-            MeasurementUnit.Miles -> value * 1609.34
+            MeasurementUnit.Miles -> value * 1609.344
             MeasurementUnit.Yards -> value * 0.9144
             MeasurementUnit.Centimeters -> value / 100
             MeasurementUnit.Millimeters -> value / 1000
@@ -48,15 +62,15 @@ class ConverterViewModel: ViewModel() {
         val convertedValue = when (toUnit) {
             MeasurementUnit.Meters -> meters
             MeasurementUnit.Kilometers -> meters / 1000
-            MeasurementUnit.Feet -> meters * 3.28084
-            MeasurementUnit.Inches -> meters * 39.3701
+            MeasurementUnit.Feet -> meters * 3.280839895
+            MeasurementUnit.Inches -> meters * 39.3700787402
             MeasurementUnit.Miles -> meters * 0.000621371
-            MeasurementUnit.Yards -> meters * 1.09361
+            MeasurementUnit.Yards -> meters * 1.0936133
             MeasurementUnit.Centimeters -> meters * 100
             MeasurementUnit.Millimeters -> meters * 1000
         }
 
-        return convertedValue;
+        return formatDecimals(convertedValue)
     }
 
     fun convert(value: String, fromUnit: MeasurementUnit, toUnit: MeasurementUnit) {
