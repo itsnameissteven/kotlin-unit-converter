@@ -90,6 +90,9 @@ fun MainContent() {
 
     fun updateFromValue(value: String) {
         fromValue = value
+        if(value.toDoubleOrNull() == null) {
+            return
+        }
         if(value == "") {
             toValue = ""
         } else {
@@ -100,6 +103,9 @@ fun MainContent() {
 
     fun updateToValue(value: String) {
         toValue = value
+        if(value.toDoubleOrNull() == null) {
+            return
+        }
         if(value == "") {
             fromValue = ""
         } else {
