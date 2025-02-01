@@ -125,7 +125,7 @@ fun MainContent() {
             options = converterViewModel.measurements,
             onChangeValue = {result -> updateFromValue(result)},
             selectedUnit = fromUnit,
-            onChangeUnit = {result -> fromUnit = result}
+            onChangeUnit = {result -> fromUnit = result;  updateFromValue(fromValue)}
         )
         UnitRow(
             "To",
@@ -133,7 +133,7 @@ fun MainContent() {
             options = converterViewModel.measurements,
             onChangeValue = {result -> updateToValue(result)},
             selectedUnit = toUnit,
-            onChangeUnit = {result -> toUnit = result}
+            onChangeUnit = {result -> toUnit = result; updateToValue(toValue)}
         )
     }
 }
@@ -157,12 +157,12 @@ fun UnitRow(
     Row(modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween) {
         TextField(
-            modifier = Modifier.weight(.6f).padding(start = 8.dp, end = 4.dp, top = 8.dp),
+            modifier = Modifier.weight(.55f).padding(start = 8.dp, end = 4.dp, top = 8.dp),
             value = measurementValue,
             onValueChange = {result -> onChangeValue(result)},
             label = { Text(text = textLabel) }
         )
-        Box(Modifier.fillMaxWidth().weight(.4f).padding(start = 4.dp, end = 8.dp, bottom = 8.dp)) {
+        Box(Modifier.fillMaxWidth().weight(.45f).padding(start = 4.dp, end = 8.dp, bottom = 8.dp)) {
             OutlinedTextField(
                 value = selectedUnit?.displayName ?: "",
                 onValueChange = { },
